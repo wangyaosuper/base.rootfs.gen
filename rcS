@@ -1,0 +1,25 @@
+#!/bin/sh
+#mount -t proc none /proc
+#mount -t sysfs none /sys
+
+/bin/mount -a
+/sbin/mdev -s
+
+ifconfig lo up
+ifconfig eth0 10.0.2.33 netmask 255.255.255.0
+route add default gw 10.0.2.2
+
+mkdir /dev/pts
+mknod /dev/pts/0 c 136 0
+mknod /dev/pts/1 c 136 1
+mknod /dev/pts/2 c 136 2
+mknod /dev/pts/3 c 136 3
+mknod /dev/pts/4 c 136 4
+mknod /dev/pts/5 c 136 5
+
+
+
+mount -t vfat /dev/mmcblk0 /mnt/disk1
+mount -t devpts devpts /dev/pts
+/usr/sbin/telnetd &
+syslogd -n -m 0 -C256 &
